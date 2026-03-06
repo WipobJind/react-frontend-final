@@ -76,7 +76,7 @@ export default function BookBorrow() {
             <th>Created</th>
             <th>Target Date</th>
             <th>Status</th>
-            {user.role === "ADMIN" && <th>Actions</th>}
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -87,17 +87,20 @@ export default function BookBorrow() {
               <td>{b.createdAt}</td>
               <td>{b.targetDate}</td>
               <td>{b.status}</td>
-              {user.role === "ADMIN" && (
-                <td>
-                  <select onChange={(e) => onUpdateStatus(b._id, e.target.value)} defaultValue={b.status}>
+              <td>
+                {user.role === "ADMIN" && (
+                  <select onChange={(e) => onUpdateStatus(b._id, e.target.value)} value={b.status}>
                     <option value="INIT">INIT</option>
                     <option value="ACCEPTED">ACCEPTED</option>
                     <option value="CLOSE-NO-AVAILABLE-BOOK">CLOSE-NO-AVAILABLE-BOOK</option>
                     <option value="CANCEL-ADMIN">CANCEL-ADMIN</option>
                     <option value="CANCEL-USER">CANCEL-USER</option>
                   </select>
-                </td>
-              )}
+                )}
+                {user.role === "USER" && b.status === "INIT" && (
+                  <button onClick={() => onUpdateStatus(b._id, "CANCEL-USER")}>Cancel</button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
